@@ -16,7 +16,14 @@ namespace nTrans2Quik
     public enum TranType
     {
         New = 1,
-        Kill=2
+        Kill = 2
+    }
+
+    public enum ExecCondiotion
+    {
+        Queue = 1,        //Поставить в очередь
+        FillOrKill = 1,   // Полностью или отклонить
+        KillBalance = 3   //Снять остаток
     }
 
     public class Trade

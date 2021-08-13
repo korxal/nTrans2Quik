@@ -388,6 +388,16 @@ namespace nTrans2Quik
                     break;
             }
 
+            switch(t.ExecutionCondition)
+            {
+                case ExecCondiotion.FillOrKill:
+                    sb.V("EXECUTION_CONDITION", "FILL_OR_KILL");
+                    break;
+                case ExecCondiotion.KillBalance:
+                    sb.V("EXECUTION_CONDITION", "KILL_BALANCE");
+                    break;
+            }
+
             sb.V("CLASSCODE", t.ClassCode);
             sb.V("SECCODE", t.SecCode);
             sb.V("PRICE", t.Price);

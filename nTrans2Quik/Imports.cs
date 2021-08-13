@@ -43,7 +43,7 @@ namespace nTrans2Quik
         /// <param name="dwErrorMessageSize">(Вход) Длинна буфера сообщения</param>
         /// <returns></returns>
         [DllImport(Lib, EntryPoint = "TRANS2QUIK_SET_CONNECTION_STATUS_CALLBACK", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Ansi)]
-        private static extern Int32 ExtSetConnectionStatusCallBack(ConnStatusCallBack pfConnectionStatusCallback, Int32 pnExtendedErrorCode, byte[] lpstrErrorMessage, UInt32 dwErrorMessageSize);
+        private static extern Int32 ExtSetConnectionStatusCallBack(ExtConnStatusCallBack pfConnectionStatusCallback, Int32 pnExtendedErrorCode, byte[] lpstrErrorMessage, UInt32 dwErrorMessageSize);
 
         /// <summary>
         /// Проверяет статус подключения к Терминалу
@@ -61,7 +61,7 @@ namespace nTrans2Quik
         /// <param name="nConnectionEvent">10-Подключение установлено, 11-Подключение разорвано</param>
         /// <param name="nExtendedErrorCode">Код ошибки ОС</param>
         /// <param name="lpstrInfoMessage">Сообщение</param>
-        private delegate void ConnStatusCallBack(Int32 nConnectionEvent, UInt32 nExtendedErrorCode, byte[] lpstrInfoMessage);
+        private delegate void ExtConnStatusCallBack(Int32 nConnectionEvent, UInt32 nExtendedErrorCode, byte[] lpstrInfoMessage);
 
         /// <summary>
         /// Проверяет подключён ли теоминал к серверу Quik

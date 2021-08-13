@@ -315,6 +315,18 @@ namespace nTrans2Quik
             return false;
         }
 
+        /// <summary>
+        /// Проверяет подключена ли библиотека Trans2Quik к Терминалу 
+        /// </summary>
+        /// <returns></returns>
+        public bool IsConnectedToQuikTerminal()
+        {
+            byte[] ErrorMessage = new byte[1024];
+            Int32 ErrorCode = 0;
+            Int32 rez;
+            rez = ExtIsDllConnected(ref ErrorCode, ErrorMessage, (UInt32)ErrorMessage.Length);
+            return rez == 10;
+        }
 
 
         /// <summary>

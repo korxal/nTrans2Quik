@@ -1,7 +1,9 @@
-﻿using System;
-using System.IO;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
-
+using System.IO;
+using System;
 
 namespace nTrans2Quik
 {
@@ -20,6 +22,18 @@ namespace nTrans2Quik
 
         public delegate void TradeDelegate(Trade o);
         public event TradeDelegate NewTrade;
+
+        public ConcurrentDictionary<ulong, Order> OrderCache = new ConcurrentDictionary<ulong, Order>();
+        public ConcurrentDictionary<ulong, Trade> TradeCache = new ConcurrentDictionary<ulong, Trade>();
+        public ConcurrentDictionary<ulong, Transaction> TransactionCache = new ConcurrentDictionary<ulong, Transaction>();
+
+
+        public Transaction GetTransaction(ulong OrderNumber) => TransactionCache.ContainsKey(OrderNumber) ? TransactionCache[OrderNumber] : null;
+        public Order GetOrder(ulong OrderNumber) => OrderCache.ContainsKey(OrderNumber) ? OrderCache[OrderNumber] : null;
+        public Trade GetTrade(ulong TradeNumber) => TradeCache.ContainsKey(TradeNumber) ? TradeCache[TradeNumber] : null;
+
+        public List<Trade> GetOrderTrades(ulong OrderNumber) => OrderCache.ContainsKey(OrderNumber) ? TradeCache.Values.Where(x => x.OrderNumber == OrderNumber).ToList(): null;
+
 
         private readonly Encoding RU = Encoding.GetEncoding(1251);
         private string Str(byte[] arr) => RU.GetString(arr).TrimEnd('\0');// Для чтения C строк
@@ -74,6 +88,7 @@ namespace nTrans2Quik
                 TerminalMessage = TransactionReplyMessage,
             };
 
+            TransactionCache.TryAdd(dOrderNum, rez);
             NewTransaction?.Invoke(rez);
 
         }
@@ -125,13 +140,12 @@ namespace nTrans2Quik
             o.UID = ExtOrdUid(pOrderDescriptor);
             o.UserId = ExtOrdUserId(pOrderDescriptor);
             o.Period = ExtOrdPeriod(pOrderDescriptor);
-
             o.ActivationDate = Utils.FromArqaTime(ExtOrdActivationTime(pOrderDescriptor));
             o.ExpiryDate = Utils.FromArqaTime(ExtOrdExpiry(pOrderDescriptor));
             o.WithdrawalDate = Utils.FromArqaTime(ExtOrdWithdrawTime(pOrderDescriptor));
-
             o.Date = Utils.FromArqaDealDate(ExtOrdDateTime(pOrderDescriptor, 0), ExtOrdDateTime(pOrderDescriptor, 1), ExtOrdDateTime(pOrderDescriptor, 2));
 
+            OrderCache.TryAdd(o.OrderNum, o);
 
             NewOrder?.Invoke(o);
 
@@ -183,7 +197,7 @@ namespace nTrans2Quik
             t.Yield = ExtTrdYield(pTradeDescriptor);
             t.Volume1 = ExtTrdRepoValue(pTradeDescriptor);
             t.Volume2 = ExtTrdRepoValue2(pTradeDescriptor);
-
+            TradeCache.TryAdd(t.Number, t);
             NewTrade?.Invoke(t);
 
         }

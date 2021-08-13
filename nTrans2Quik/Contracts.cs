@@ -114,6 +114,7 @@ namespace nTrans2Quik
     public class Transaction
     {
 
+        public ExecCondiotion ExecutionCondition;
 
 
         /// <summary>

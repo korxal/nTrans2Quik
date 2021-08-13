@@ -24,6 +24,14 @@ namespace nTrans2Quik
         private readonly Encoding RU = Encoding.GetEncoding(1251);
         private string Str(byte[] arr) => RU.GetString(arr).TrimEnd('\0');// Для чтения C строк
 
+
+        //Ссылка на делегаты. Иначе за делегатом придёт заботливый GC
+        private ExtAsyncTransactionResultDelegate AsyncTransactionResultDelegate;
+        private ExtOrderStatusCallback AsyncOrderStatusCallback;
+        private ExtTradeStatusCallback AsyncTradeStatusCallback;
+        private ExtConnStatusCallBack AsyncConnStatusCallBack;
+
+
         /// <summary>
         /// Делегат статуса подключения к Терминалу. Вызывается библиотекой Trans2Quik когда меняется статус подключения.
         /// </summary>
@@ -187,7 +195,8 @@ namespace nTrans2Quik
         {
             Int32 ErrorCode = 0;
             byte[] ErrorMessage = new byte[1024];
-            ExtSendTransactionSetCallback(NewTransactionEvent, ref ErrorCode, ErrorMessage, (UInt32)ErrorMessage.Length);
+            AsyncTransactionResultDelegate = new ExtAsyncTransactionResultDelegate(NewTransactionEvent);
+            ExtSendTransactionSetCallback(AsyncTransactionResultDelegate, ref ErrorCode, ErrorMessage, (UInt32)ErrorMessage.Length);
         }
 
 
@@ -196,8 +205,9 @@ namespace nTrans2Quik
         /// </summary>
         private void AttachOrderEvent()
         {
+            AsyncOrderStatusCallback = new ExtOrderStatusCallback(NewOrderEvent);
             ExtSubscribeOrders("", "");//Подписка на все ордера
-            ExtStartOrders(NewOrderEvent);
+            ExtStartOrders(AsyncOrderStatusCallback);
         }
 
         /// <summary>
@@ -205,8 +215,9 @@ namespace nTrans2Quik
         /// </summary>
         private void AttachTradeEvent()
         {
+            AsyncTradeStatusCallback = new ExtTradeStatusCallback(NewTradeEvent);
             ExtSubscribeTrades("", "");//Подписка на все сделки
-            ExtStartTrades(NewTradeEvent);
+            ExtStartTrades(AsyncTradeStatusCallback);
         }
 
         /// <summary>
@@ -221,7 +232,8 @@ namespace nTrans2Quik
 
             try
             {
-                rez = ExtSetConnectionStatusCallBack(ConnectionStatusDelegate, ErrorCode, ErrorMessage, (UInt32)ErrorMessage.Length);
+                AsyncConnStatusCallBack = new ExtConnStatusCallBack(ConnectionStatusDelegate);
+                rez = ExtSetConnectionStatusCallBack(AsyncConnStatusCallBack, ErrorCode, ErrorMessage, (UInt32)ErrorMessage.Length);
             }
             catch (BadImageFormatException)
             {

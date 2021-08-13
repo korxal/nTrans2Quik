@@ -78,7 +78,7 @@ namespace nTrans2Quik
 
     public class Order
     {
-     
+
         public bool IsNew;
         public Side Side;
         public ulong OrderNum;
@@ -129,7 +129,7 @@ namespace nTrans2Quik
         /// <summary>
         /// Номер ордера в торговой системе. Заполняется по результатм транзакции
         /// </summary>
-        public ulong OrderNum; 
+        public ulong OrderNum;
 
         /// <summary>
         /// Код класса, например TQBR

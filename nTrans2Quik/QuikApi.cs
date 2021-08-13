@@ -365,7 +365,7 @@ namespace nTrans2Quik
 
             StringBuilder sb = new StringBuilder();
 
-         
+
             sb.V("TRANS_ID", t.InternalId);
 
             switch (t.TransactionType)
@@ -388,7 +388,7 @@ namespace nTrans2Quik
                     break;
             }
 
-            switch(t.ExecutionCondition)
+            switch (t.ExecutionCondition)
             {
                 case ExecCondiotion.FillOrKill:
                     sb.V("EXECUTION_CONDITION", "FILL_OR_KILL");

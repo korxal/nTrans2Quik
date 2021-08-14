@@ -18,6 +18,38 @@
 2.	Создайте новое консольное приложение в Visual Studio или Viusal Stuido Code
 3.	Подключите Nuget пакет nTrans2Quik
 4.	Вставьте в метод Main код ниже:
+
+````c#
+nTrans2Quik.Trans2Quik Q;
+try
+{
+    Q = new nTrans2Quik.Trans2Quik("C:\\Quik");//Путь к терминалу Quik
+}
+catch (Exception e)
+{
+    Console.WriteLine("Не смогли найти терминал: " + e.Message);
+    Console.ReadLine();
+    return;
+}
+
+Q.ConnectToQuikTerminal(); //Подключаемся к терминалу
+
+nTrans2Quik.Transaction t = new nTrans2Quik.Transaction() //Готовим транзакцию
+{
+    InternalId = 1, //Внутренний порядковый номер
+    Side = nTrans2Quik.Side.Buy,//Покупка
+    ClassCode = "TQBR",//Код класса
+    SecCode = "AFLT",//Код инструмента - Аэрофлот
+    ClientCode = "657548", //Код клиента у брокера
+    Qty = 1, // 1 ЛОТ
+    Account = "L01-00000F00" // Счёт. Если брокер то обычно L01-00000F00
+};
+nTrans2Quik.Transaction rez = Q.SendTransaction(t); //Отправляем транзакцию
+
+Console.WriteLine("Результат:" + rez.TerminalMessage + " " + rez.ErrorMessage);
+Console.ReadLine();
+````
+
 5.	Скачайте Api импорта транзакций с сайта Arqa https://arqatech.com/ru/support/files/ и положите Trans2Quik.dll в директорию с терминалом Quik
 6.	Если используется 64битная библиотека, то в настройках проекта снимите галку “Prefer 32 bits” 
 ![Bitness](https://raw.githubusercontent.com/korxal/nTrans2Quik/main/Docs/32Bits.png "32 бит")

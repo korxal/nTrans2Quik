@@ -63,11 +63,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Managers\ConnectionManager.cs" />
     <Compile Include="Contracts.cs" />
     <Compile Include="Imports.cs" />
+    <Compile Include="Managers\TransactionBuilder.cs" />
     <Compile Include="OrderDispatcher.cs" />
+    <Compile Include="Managers\OrderManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuikApi.cs" />
+    <Compile Include="Managers\TradeManager.cs" />
+    <Compile Include="Managers\TransactionManager.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>

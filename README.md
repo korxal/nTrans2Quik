@@ -66,3 +66,6 @@ Q.NewTrade += Q_NewTrade;
     Console.WriteLine($"Пришла новая сделка №{o.Number}");
 }
 ````
+
+## Nuget
+https://www.nuget.org/packages/nTrans2Quik/

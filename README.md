@@ -54,3 +54,15 @@ Console.ReadLine();
 6.	Если используется 64битная библиотека, то в настройках проекта снимите галку “Prefer 32 bits” 
 ![Bitness](https://raw.githubusercontent.com/korxal/nTrans2Quik/main/Docs/32Bits.png "32 бит")
 7.	При запуске приложения оно попытается отправить транзакцию в терминал и сообщит о результате
+
+## Подписка на сделки\ордера
+Осуществляется при помощи событий NewOrder, NewTrade.
+Пример:
+````c#
+Q.NewTrade += Q_NewTrade;
+\\...
+ private static void Q_NewTrade(Trade o)
+{
+    Console.WriteLine($"Пришла новая сделка №{o.Number}");
+}
+````

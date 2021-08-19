@@ -13,7 +13,7 @@
 
 ## Быстрый старт:
 
-1.	Включите в терминале Qui обработку внешних транзакций
+1.	Включите в терминале Quik обработку внешних транзакций
 ![External-Transactions](https://raw.githubusercontent.com/korxal/nTrans2Quik/main/Docs/ExternalTrans.png "Внешние транзакции")
 2.	Создайте новое консольное приложение в Visual Studio или Viusal Stuido Code
 3.	Подключите Nuget пакет nTrans2Quik
